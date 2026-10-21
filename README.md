@@ -1,0 +1,111 @@
+# Claude Desktop Proxy Guard
+
+[![Validate skill](https://github.com/Joker-chichi/claude-proxy-guard/actions/workflows/validate.yml/badge.svg)](https://github.com/Joker-chichi/claude-proxy-guard/actions/workflows/validate.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+一套面向 Windows Claude Desktop 的 sing-box 本地代理与防火墙隔离方案，同时也是可安装的 Codex Skill。
+
+> 本项目用于可审计的网络路由与隐私隔离，不保证账号安全，也不能改变 Claude 的地区、付款或服务资格。请仅在 Anthropic 当前支持的地区使用，并遵守服务条款。
+
+## 工作方式
+
+```text
+Claude Desktop MSIX
+        │ 仅允许 IPv4 127.0.0.1:20808
+        ▼
+     sing-box
+        │ HTTP 或 SOCKS 上游
+        ▼
+   用户自己的代理服务
+        ▼
+     Internet
+```
+
+它不会启用 TUN，也不依赖 Windows 系统代理或常见的 `7890` 端口。Claude MSIX 包的出站流量由 Windows 防火墙限制；本地代理不可用时，Claude 应保持断网，而不是回退为直连。
+
+## 主要能力
+
+- 生成仅监听 `127.0.0.1` 的 sing-box 配置。
+- 写入前运行 `sing-box check`，备份旧配置并原子替换。
+- 将含凭据的配置 ACL 限制为当前用户、Administrators 和 SYSTEM。
+- 按 Claude 的 Package Family 创建 fail-closed 防火墙规则。
+- 事务化更新规则；更新失败时保留临时阻断规则。
+- 通过 Windows `ApplicationActivationManager` 启动 Claude MSIX。
+- 提供独立、无扩展、固定代理参数的 Edge/Chrome 配置目录。
+- 安装登录自启任务、受控桌面快捷方式，以及保留用户数据的卸载流程。
+- 在 Windows PowerShell 5.1 上执行自动化测试，并通过 Gitleaks 检查提交历史。
+
+## 环境要求
+
+- Windows 10/11；已在 Windows 11 与 Windows PowerShell 5.1 上测试。
+- 已安装 Claude Desktop MSIX。
+- 已安装 [sing-box](https://sing-box.sagernet.org/)；已测试 1.14.2。
+- 一个由用户合法取得的 HTTP/HTTPS 或 SOCKS5 上游代理。
+- 安装防火墙规则和计划任务时需要管理员 PowerShell。
+
+## 快速开始
+
+克隆仓库：
+
+```powershell
+git clone https://github.com/Joker-chichi/claude-proxy-guard.git
+Set-Location .\claude-proxy-guard
+```
+
+先以普通 PowerShell 预览，不修改系统：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 `
+  -Server 203.0.113.10 -ServerPort 12323 -Username USERNAME `
+  -Protocol http -PlanOnly
+```
+
+确认计划后，从管理员 PowerShell 运行同一命令并移除 `-PlanOnly`。脚本会在本机安全提示框中读取代理密码；不要把密码写进命令行、Issue、聊天或截图。
+
+安装完成后使用桌面上的以下入口：
+
+- `Claude (Proxy Guard)`：检查代理和防火墙后启动 Claude。
+- `Claude Clean Browser`：打开独立的无扩展浏览器配置目录。
+
+## 检查与测试
+
+只读检查本机配置、监听进程和出口：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\inspect-claude-proxy.ps1 -CheckExit
+```
+
+运行仓库测试：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\test-skill.ps1
+```
+
+## 卸载
+
+先预览：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\uninstall.ps1 -PlanOnly
+```
+
+再从管理员 PowerShell 移除 `-PlanOnly` 执行。默认只删除本项目创建的计划任务、防火墙规则和快捷方式，并保留配置及 Claude/浏览器用户数据。需要把运行目录移到可恢复归档时，增加 `-ArchiveRuntime`。
+
+## 安全边界
+
+- 本项目不能验证或保证代理 IP“纯净”，也不能消除平台风控。
+- 防火墙规则针对 Claude MSIX 包，不等同于 Hyper-V 虚拟机或完整设备隔离。
+- 上游代理能够观察部分连接元数据；请自行评估其信誉和隐私政策。
+- Claude、Windows、浏览器或 sing-box 更新后，应重新运行测试及只读检查。
+- 不要自动化账号注册、验证码、批量登录或身份/地区伪装。
+
+完整代理工作流和执行约束见 [SKILL.md](SKILL.md)，Windows 隔离设计见 [references/windows-isolation.md](references/windows-isolation.md)。
+
+## 关联披露
+
+- `https://iproyal.cn/?r=chichi` 含项目作者的邀请码，作者可能获得佣金或奖励。
+- 项目作者声明其拥有并使用 `https://chipays.vip/` 提供 Claude Pro 代充；该网站不属于 Anthropic。应优先选择 Anthropic 官方付款方式，并自行核查当前价格、退款、隐私和交付条款。
+
+## 许可证
+
+本项目采用 [MIT License](LICENSE)。
