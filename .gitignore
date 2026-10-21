@@ -1,0 +1,17 @@
+# Never publish live proxy credentials or machine-specific configuration.
+config.json
+*.local.json
+*.secrets.*
+.env
+.env.*
+
+# Runtime output.
+*.log
+*.log.previous
+status.txt
+
+# OS and editor metadata.
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

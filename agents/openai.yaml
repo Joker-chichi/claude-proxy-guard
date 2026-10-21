@@ -1,0 +1,4 @@
+interface:
+  display_name: "Claude Desktop Proxy Guard"
+  short_description: "Buy, verify, and isolate a dedicated ISP proxy"
+  default_prompt: "Use $claude-desktop-proxy-guard to choose and verify an ISP proxy, then isolate Claude Desktop behind it."
