@@ -1,8 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$SingBoxPath,
-    [string]$ConfigPath = 'C:\ProgramData\ClaudeSingBox\config.json',
-    [string]$LogPath = 'C:\ProgramData\ClaudeSingBox\sing-box.log',
+    [string]$ConfigPath = 'C:\ProgramData\ClaudeProxyGuard\config.json',
+    [string]$LogPath = 'C:\ProgramData\ClaudeProxyGuard\sing-box.log',
     [ValidateRange(1024, 65535)][int]$ProxyPort = 20808,
     [ValidateRange(1, 1024)][int]$MaxLogSizeMB = 20,
     [switch]$AllowTun,
@@ -46,6 +46,12 @@ if ($existing.Count -gt 0) {
     $owners = @($existing | ForEach-Object { Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue })
     if (@($owners | Where-Object { $_.ProcessName -ne 'sing-box' }).Count -gt 0) {
         throw "Port 127.0.0.1:$ProxyPort is owned by a process other than sing-box."
+    }
+    foreach ($owner in $owners) {
+        $details = Get-CimInstance Win32_Process -Filter "ProcessId=$($owner.Id)" -ErrorAction Stop
+        if (-not $details.CommandLine -or $details.CommandLine.IndexOf($ConfigPath, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+            throw "The existing sing-box listener is using a different config than expected: $ConfigPath"
+        }
     }
     Write-Output "sing-box is already listening on 127.0.0.1:$ProxyPort."
     exit 0

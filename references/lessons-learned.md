@@ -14,6 +14,10 @@ These corrections come from repeated diagnosis of a real Claude Desktop MSIX and
 8. **Treat package repair as explicit recovery.** If the MSIX status is not `Ok`, report it first. Re-register its manifest only with an explicit repair switch; do not routinely change package permissions.
 9. **Rotate logs.** A continuously running proxy log can grow past 100 MB. Rotate it at startup when it exceeds the configured limit and keep only one previous copy.
 10. **Never copy live credentials into a reusable skill.** Parameterize server, port, username, and password; read the password through a secure prompt and restrict the config ACL.
+11. **Do not remove working firewall rules before replacements exist.** Stage and validate blocking rules first, then replace invalid stable rules and clean up only after full validation.
+12. **Do not reuse a dedicated Chromium profile blindly.** A lingering background process can ignore a new invocation's proxy flags. Verify its command line or refuse to continue.
+13. **Do not bind a scheduled task to the Skill checkout.** Copy the runtime to a stable ProgramData directory so Git pulls, Skill reinstalls, and folder moves do not break startup.
+14. **Always provide recovery.** Back up configs atomically, preserve user profiles, and ship a scoped uninstaller.
 
 ## Required test order
 

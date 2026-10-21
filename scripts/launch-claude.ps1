@@ -3,7 +3,7 @@ param(
     [ValidateRange(1024, 65535)][int]$ProxyPort = 20808,
     [string]$TaskName = 'ClaudeSingBox',
     [string]$StartSingBoxScript = (Join-Path $PSScriptRoot 'start-singbox.ps1'),
-    [string]$ConfigPath = 'C:\ProgramData\ClaudeSingBox\config.json',
+    [string]$ConfigPath = 'C:\ProgramData\ClaudeProxyGuard\config.json',
     [string]$SingBoxPath,
     [string]$UserDataDir = (Join-Path $env:LOCALAPPDATA 'ClaudeProxyGuard\ClaudeProfile'),
     [string]$PackageName = 'Claude',
@@ -22,9 +22,16 @@ function Get-HealthyClaudePackage {
     if (-not $package) { throw "Claude Desktop package '$PackageName' was not found." }
     if ($package.Status.ToString() -ne 'Ok') {
         if (-not $RepairPackage) { throw "Claude package status is $($package.Status). Rerun with -RepairPackage only after reviewing the diagnosis." }
-        Stop-Service -Name 'CoworkVMService' -Force -ErrorAction SilentlyContinue
-        $manifest = Join-Path $package.InstallLocation 'AppxManifest.xml'
-        Add-AppxPackage -DisableDevelopmentMode -Register $manifest -ForceApplicationShutdown
+        $coworkService = Get-Service -Name 'CoworkVMService' -ErrorAction SilentlyContinue
+        $restartCoworkService = $coworkService -and $coworkService.Status -eq 'Running'
+        try {
+            if ($coworkService) { Stop-Service -Name 'CoworkVMService' -Force -ErrorAction Stop }
+            $manifest = Join-Path $package.InstallLocation 'AppxManifest.xml'
+            Add-AppxPackage -DisableDevelopmentMode -Register $manifest -ForceApplicationShutdown
+        }
+        finally {
+            if ($restartCoworkService) { Start-Service -Name 'CoworkVMService' -ErrorAction Continue }
+        }
         $package = Get-AppxPackage -Name $PackageName | Sort-Object Version -Descending | Select-Object -First 1
         if (-not $package -or $package.Status.ToString() -ne 'Ok') { throw 'Claude Desktop package repair failed.' }
     }
@@ -65,7 +72,7 @@ if (-not $SkipFirewallValidation) {
     & $firewallScript -ProxyPort $ProxyPort -PackageName $PackageName -ValidateOnly
 }
 
-$listener = Get-NetTCPConnection -State Listen -LocalAddress $proxyHost -LocalPort $ProxyPort -ErrorAction SilentlyContinue
+$listener = Get-NetTCPConnection -State Listen -LocalAddress $proxyHost -LocalPort $ProxyPort -ErrorAction SilentlyContinue | Select-Object -First 1
 if (-not $listener) {
     $task = Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue
     if ($task) { Start-ScheduledTask -TaskName $TaskName }
@@ -79,7 +86,7 @@ if (-not $listener) {
     $deadline = (Get-Date).AddSeconds($StartupTimeoutSeconds)
     do {
         Start-Sleep -Milliseconds 500
-        $listener = Get-NetTCPConnection -State Listen -LocalAddress $proxyHost -LocalPort $ProxyPort -ErrorAction SilentlyContinue
+        $listener = Get-NetTCPConnection -State Listen -LocalAddress $proxyHost -LocalPort $ProxyPort -ErrorAction SilentlyContinue | Select-Object -First 1
     } until ($listener -or (Get-Date) -gt $deadline)
     if (-not $listener) { throw "Dedicated proxy did not start within $StartupTimeoutSeconds seconds." }
 }

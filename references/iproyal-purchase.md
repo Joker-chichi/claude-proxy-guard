@@ -19,7 +19,7 @@ The requested URL is `https://iproyal.cn/?r=chichi`. The `r=chichi` parameter is
 
 ## Purchase choices
 
-1. Verify that the user's real location and intended use meet Anthropic's current rules.
+1. Verify that the user's real physical location and intended use meet Anthropic's current rules. Stop the workflow if the location is unsupported; do not present a proxy as a way to create eligibility.
 2. Compare official 24-hour and 30-day pricing. Start with one 24-hour IP when available.
 3. Select the user's actual supported European country. Germany is one option only when it matches legitimate circumstances.
 4. Use HTTP/HTTPS unless SOCKS5 is required. Use the dashboard's exact port.

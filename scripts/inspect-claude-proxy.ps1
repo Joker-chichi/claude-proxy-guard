@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [ValidateRange(1024, 65535)][int]$ProxyPort = 20808,
-    [string]$ConfigPath = 'C:\ProgramData\ClaudeSingBox\config.json',
+    [string]$ConfigPath = 'C:\ProgramData\ClaudeProxyGuard\config.json',
     [switch]$CheckExit
 )
 

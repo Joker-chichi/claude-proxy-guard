@@ -2,15 +2,17 @@
 param(
     [string]$TaskName = 'ClaudeSingBox',
     [string]$StartScriptPath = (Join-Path $PSScriptRoot 'start-singbox.ps1'),
+    [string]$ConfigPath = 'C:\ProgramData\ClaudeProxyGuard\config.json',
+    [string]$SingBoxPath,
     [ValidateRange(1024, 65535)][int]$ProxyPort = 20808,
     [switch]$PlanOnly
 )
 
 $ErrorActionPreference = 'Stop'
-if (-not (Test-Path -LiteralPath $StartScriptPath -PathType Leaf)) { throw "Start script not found: $StartScriptPath" }
 $powerShellPath = Join-Path $PSHOME 'powershell.exe'
 if (-not (Test-Path -LiteralPath $powerShellPath)) { $powerShellPath = (Get-Command powershell.exe -ErrorAction Stop).Source }
-$arguments = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$StartScriptPath`" -ProxyPort $ProxyPort"
+$arguments = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$StartScriptPath`" -ConfigPath `"$ConfigPath`" -ProxyPort $ProxyPort"
+if ($SingBoxPath) { $arguments += " -SingBoxPath `"$SingBoxPath`"" }
 $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent().Name
 
 Write-Output "Task: $TaskName"
@@ -18,6 +20,8 @@ Write-Output "User: $currentUser"
 Write-Output "Action: $powerShellPath $arguments"
 Write-Output 'Trigger: at user logon; restart up to 3 times after failure'
 if ($PlanOnly) { exit 0 }
+
+if (-not (Test-Path -LiteralPath $StartScriptPath -PathType Leaf)) { throw "Start script not found: $StartScriptPath" }
 
 $principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) { throw 'Run this script from an elevated PowerShell window.' }

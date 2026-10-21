@@ -1,5 +1,7 @@
 # Never publish live proxy credentials or machine-specific configuration.
 config.json
+config.json.backup-*
+.*.tmp
 *.local.json
 *.secrets.*
 .env
