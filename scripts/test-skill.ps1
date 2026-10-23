@@ -19,6 +19,26 @@ if ($skillText -notmatch '(?s)^---\s+name:\s+claude-desktop-proxy-guard\s+descri
     $failures.Add('SKILL.md frontmatter is missing or malformed.')
 }
 
+$readmeText = Get-Content -LiteralPath (Join-Path $repoRoot 'README.md') -Raw
+$consistencyPath = Join-Path $repoRoot 'references\account-environment-consistency.md'
+if (-not (Test-Path -LiteralPath $consistencyPath -PathType Leaf)) {
+    $failures.Add('Account-environment consistency reference is missing.')
+}
+else {
+    $consistencyText = Get-Content -LiteralPath $consistencyPath -Raw
+    foreach ($requiredPhrase in @('language and time zone', 'dedicated, low-churn endpoint', 'disposable SMS', 'own identity document', 'observation period')) {
+        if ($consistencyText -notmatch [Regex]::Escape($requiredPhrase)) {
+            $failures.Add("Account-environment consistency reference is missing required guidance: $requiredPhrase")
+        }
+    }
+}
+if ($skillText -notmatch 'references/account-environment-consistency\.md') {
+    $failures.Add('SKILL.md does not link the account-environment consistency reference.')
+}
+if ($readmeText -notmatch 'references/account-environment-consistency\.md') {
+    $failures.Add('README.md does not link the account-environment consistency reference.')
+}
+
 $tempBase = [IO.Path]::GetTempPath()
 $testRoot = Join-Path $tempBase ("claude-proxy-guard-test-{0}" -f [Guid]::NewGuid().ToString('N'))
 [IO.Directory]::CreateDirectory($testRoot) | Out-Null

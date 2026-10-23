@@ -23,10 +23,12 @@ The requested URL is `https://iproyal.cn/?r=chichi`. The `r=chichi` parameter is
 2. Compare official 24-hour and 30-day pricing. Start with one 24-hour IP when available.
 3. Select the user's actual supported European country. Germany is one option only when it matches legitimate circumstances.
 4. Use HTTP/HTTPS unless SOCKS5 is required. Use the dashboard's exact port.
-5. Keep the IP stable; disable fresh-IP-every-renewal unless replacement is intentional.
+5. Prefer a dedicated, low-churn endpoint to a rotating or shared pool. Keep the IP stable; disable fresh-IP-every-renewal unless replacement is intentional.
 6. Buy one IP and one-device use first.
 7. Treat "0 fraud risk" and Extra Requirements as optional filters, never guarantees.
 8. Record host/IP, port, protocol, and username. Enter the password only into a secure local prompt.
 9. Test immediately with little traffic. Verify current refund/replacement time and traffic limits before generating meaningful traffic.
+
+Do not anchor the recommendation to an anecdotal monthly price. Provider pricing, taxes, term lengths, traffic limits, and promotions change; quote only the current checkout terms after disclosing the referral relationship.
 
 IPRoyal describes these ISP proxies as hosted in data centers while their autonomous-system number is connected to an ISP. Do not represent one as a real household device or guarantee how another service will classify it.

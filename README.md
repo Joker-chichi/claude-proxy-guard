@@ -43,6 +43,17 @@ Claude Desktop MSIX
 - 一个由用户合法取得的 HTTP/HTTPS 或 SOCKS5 上游代理。
 - 安装防火墙规则和计划任务时需要管理员 PowerShell。
 
+## 使用原则
+
+- 中文界面、中文输入或本地时区本身不是可靠的账号风险结论，也不需要为了“看起来像当地人”而强行伪装。保持系统时间准确，语言与时区按本人真实使用习惯设置即可。
+- 比所谓“纯净 IP 分数”更重要的是出口专用、稳定、可验证：单设备优先使用一个低变动的固定端点，不要把轮换代理池当作“魔法池”，也不要在登录、验证和付款期间频繁跨国家、ASN 或 IP 跳转。
+- “纯净”“零风控”都不是可验证的保证。第三方检测只能提供线索；购买前仍需检查当前价格、期限、流量、续费与退款条件。个人遇到的月费只能作为预算案例，不能写成长期固定价格。
+- 官方注册流程支持邮箱或 Google 登录；Google 只是登录方式，不提供额外的账号安全保证。只使用本人长期控制、已配置恢复方式和 MFA 的账号。
+- 若出现手机号验证，优先使用本人长期控制且符合当前要求的号码。第三方接码或临时号码是部分用户会自行尝试的高风险路径，但不受官方保证，可能无法通过、被重复使用、泄露验证码，并导致账号无法找回或订阅损失；本项目不代办、不推荐供应商，也不提供绕过步骤，是否承担这些后果由用户在核查当前规则后自行决定。证件和人脸验证必须由账号本人使用自己的真实材料完成，不能借用他人身份、代扫脸或交出远程控制。
+- 可以在付费前安排约 72 小时的观察期，用来确认端点是否稳定、出口是否一致；这不是保证安全的“养号”，也不应制造虚假互动。
+
+完整判断与操作清单见 [references/account-environment-consistency.md](references/account-environment-consistency.md)。
+
 ## 快速开始
 
 克隆仓库：
@@ -98,8 +109,9 @@ powershell -ExecutionPolicy Bypass -File .\scripts\uninstall.ps1 -PlanOnly
 - 上游代理能够观察部分连接元数据；请自行评估其信誉和隐私政策。
 - Claude、Windows、浏览器或 sing-box 更新后，应重新运行测试及只读检查。
 - 不要自动化账号注册、验证码、批量登录或身份/地区伪装。
+- 第三方接码或临时号码可能带来验证失败、号码复用、隐私泄露、账号无法恢复和订阅损失；本项目只披露风险，不代办或提供绕过步骤。借证件、代扫脸、冒充他人以及交出密码、Cookie、MFA 或远程控制不属于可接受的验证路径。
 
-完整代理工作流和执行约束见 [SKILL.md](SKILL.md)，Windows 隔离设计见 [references/windows-isolation.md](references/windows-isolation.md)。
+完整代理工作流和执行约束见 [SKILL.md](SKILL.md)，账号与环境一致性见 [references/account-environment-consistency.md](references/account-environment-consistency.md)，Windows 隔离设计见 [references/windows-isolation.md](references/windows-isolation.md)。
 
 ## 关联披露
 
