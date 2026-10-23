@@ -26,7 +26,7 @@ if (-not (Test-Path -LiteralPath $consistencyPath -PathType Leaf)) {
 }
 else {
     $consistencyText = Get-Content -LiteralPath $consistencyPath -Raw
-    foreach ($requiredPhrase in @('language and time zone', 'dedicated, low-churn endpoint', 'disposable SMS', 'field experience', 'author-tested compatibility', 'Chinese passport', 'mobile route is a critical preflight check', 'observation period')) {
+    foreach ($requiredPhrase in @('language and time zone', 'dedicated, low-churn endpoint', 'disposable SMS', 'field experience', 'author-tested compatibility', 'Chinese passport', 'mobile route is a critical preflight check', 'physically in a currently supported Anthropic region', 'Changing only the phone IP does not create regional eligibility', 'observation period')) {
         if ($consistencyText -notmatch [Regex]::Escape($requiredPhrase)) {
             $failures.Add("Account-environment consistency reference is missing required guidance: $requiredPhrase")
         }
