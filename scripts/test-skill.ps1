@@ -26,7 +26,7 @@ if (-not (Test-Path -LiteralPath $consistencyPath -PathType Leaf)) {
 }
 else {
     $consistencyText = Get-Content -LiteralPath $consistencyPath -Raw
-    foreach ($requiredPhrase in @('language and time zone', 'dedicated, low-churn endpoint', 'disposable SMS', 'own identity document', 'observation period')) {
+    foreach ($requiredPhrase in @('language and time zone', 'dedicated, low-churn endpoint', 'disposable SMS', 'no published Anthropic evidence', 'Chinese passport', 'mobile device clock', 'observation period')) {
         if ($consistencyText -notmatch [Regex]::Escape($requiredPhrase)) {
             $failures.Add("Account-environment consistency reference is missing required guidance: $requiredPhrase")
         }

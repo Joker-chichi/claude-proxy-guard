@@ -27,7 +27,7 @@ Do not treat an anecdotal monthly price as a product requirement. Re-check the c
 
 Use the repository's persistent, extension-free browser profile with the explicit proxy and QUIC disabled. Do not mix the dedicated profile with the default browser profile, and do not reuse it through an ordinary Chrome or Edge shortcut.
 
-Anthropic's official Pro signup guide currently documents email and Google as login choices. A user-owned Google account with MFA and recovery configured is reasonable, but Google login is optional and is not inherently safer from review. Never use a borrowed, purchased, shared, or mass-created Google or Claude account.
+Anthropic's official Pro signup guide currently documents email and Google as login choices. Prefer a user-owned Google account with MFA and recovery configured when the user wants a well-established login and recovery chain. However, there is no published Anthropic evidence that choosing Google lowers the probability of phone verification, so do not present it as a way to avoid a check. Never use a borrowed, purchased, shared, or mass-created Google or Claude account.
 
 The user must type credentials and complete login, CAPTCHA, recovery, and checkout themselves. The assistant may inspect configuration and explain a page, but must not request, store, type, or transmit passwords, cookies, MFA codes, or recovery codes.
 
@@ -41,9 +41,9 @@ Explain those losses before the user decides. The project must not select or end
 
 ## 5. Keep identity and face checks personal
 
-If an official flow requests identity or biometric verification, the account owner must use their own identity document and their own face, with truthful details. Borrowing a passport, asking another person to verify, using prerecorded media, or handing remote control to a seller is identity misrepresentation and is not presented as a method in this project.
+If an official flow requests identity or biometric verification, the account owner must use their own identity document and their own face, with truthful details. If the live official KYC page explicitly lists a Chinese passport as an accepted document, the account owner may submit their own valid Chinese passport. Acceptance depends on the current official flow or its verification provider; Anthropic has not published a universal passport-acceptance list, so never promise that it will pass. Borrowing a passport, asking another person to verify, using prerecorded media, or handing remote control to a seller is identity misrepresentation and is not presented as a method in this project.
 
-Complete the official flow on the user's own device. Before scanning a QR code or moving from desktop to phone, confirm that the mobile device is using a secure, expected network and that the session will not jump between unrelated countries or endpoints. If that continuity cannot be maintained, pause the verification instead of changing routes mid-flow.
+Complete the official flow on the user's own device. Before scanning a QR code or moving from desktop to phone, confirm that the mobile device clock is correct and its network is secure, stable, and expected. Avoid changing Wi-Fi, cellular service, country, or exit IP after the verification session begins. The critical requirement is session continuity, not configuring the phone IP to impersonate an eligible location. If that continuity cannot be maintained, pause the verification instead of changing routes mid-flow.
 
 ## 6. Use observation, not synthetic “account warming”
 
