@@ -27,7 +27,7 @@ Do not treat an anecdotal monthly price as a product requirement. Re-check the c
 
 Use the repository's persistent, extension-free browser profile with the explicit proxy and QUIC disabled. Do not mix the dedicated profile with the default browser profile, and do not reuse it through an ordinary Chrome or Edge shortcut.
 
-Anthropic's official Pro signup guide currently documents email and Google as login choices. Prefer a user-owned Google account with MFA and recovery configured when the user wants a well-established login and recovery chain. However, there is no published Anthropic evidence that choosing Google lowers the probability of phone verification, so do not present it as a way to avoid a check. Never use a borrowed, purchased, shared, or mass-created Google or Claude account.
+Anthropic's official Pro signup guide currently documents email and Google as login choices. Strongly recommend a user-owned Google account with MFA and recovery configured as the first choice because it provides a well-established login and recovery chain. Project experience suggests this may reduce extra phone-verification prompts, but Anthropic has not published a probability or guarantee; present it as field experience, not as a way to bypass a required check. Never use a borrowed, purchased, shared, or mass-created Google or Claude account.
 
 The user must type credentials and complete login, CAPTCHA, recovery, and checkout themselves. The assistant may inspect configuration and explain a page, but must not request, store, type, or transmit passwords, cookies, MFA codes, or recovery codes.
 
@@ -41,9 +41,11 @@ Explain those losses before the user decides. The project must not select or end
 
 ## 5. Keep identity and face checks personal
 
-If an official flow requests identity or biometric verification, the account owner must use their own identity document and their own face, with truthful details. If the live official KYC page explicitly lists a Chinese passport as an accepted document, the account owner may submit their own valid Chinese passport. Acceptance depends on the current official flow or its verification provider; Anthropic has not published a universal passport-acceptance list, so never promise that it will pass. Borrowing a passport, asking another person to verify, using prerecorded media, or handing remote control to a seller is identity misrepresentation and is not presented as a method in this project.
+If an official flow requests identity or biometric verification, the account owner must use their own identity document and their own face, with truthful details. As of October 2026, the project author has successfully completed Claude's Persona-powered passport and live-selfie flow using their own valid mainland Chinese passport. Anthropic's official guide separately states that original physical passports from most countries are accepted. Therefore, recommend the account owner's own physical Chinese passport when the flow requests a passport: select `China` and `Passport`, capture the original document, and complete the live selfie personally.
 
-Complete the official flow on the user's own device. Before scanning a QR code or moving from desktop to phone, confirm that the mobile device clock is correct and its network is secure, stable, and expected. Avoid changing Wi-Fi, cellular service, country, or exit IP after the verification session begins. The critical requirement is session continuity, not configuring the phone IP to impersonate an eligible location. If that continuity cannot be maintained, pause the verification instead of changing routes mid-flow.
+This is author-tested compatibility, not a guarantee for every account. Recent user reports indicate that Claude can present different verification templates, including flows that request more than one document. Passing identity verification also does not override supported-region rules or guarantee the account will remain enabled. Borrowing a passport, asking another person to verify, using prerecorded media, or handing remote control to a seller is identity misrepresentation and is not presented as a method in this project.
+
+Complete the official flow on the user's own device. The mobile route is a critical preflight check: before scanning a QR code or moving from desktop to phone, confirm that the mobile device clock is correct, the official verification page is reachable, and its route is secure, stable, and consistent with the user's truthful eligibility and expected session environment. Avoid changing Wi-Fi, cellular service, country, or exit IP after the verification session begins. A material desktop-to-phone route mismatch can cause the session to fail. The critical requirement is continuity, not configuring the phone IP to impersonate an eligible location. If continuity cannot be maintained, pause instead of changing routes mid-flow.
 
 ## 6. Use observation, not synthetic “account warming”
 
@@ -74,3 +76,5 @@ Before signup, verification, or payment, confirm all of the following:
 
 - Supported countries: https://www.anthropic.com/supported-countries
 - Pro signup and current regional pricing: https://support.anthropic.com/en/articles/8325609-how-do-i-sign-up-for-claude-pro
+- Claude identity verification and accepted ID categories: https://support.claude.com/en/articles/14328960-identity-verification-on-claude
+- Persona document guidance: https://help.withpersona.com/articles/10ILwkQ6xh8qDoZmF4vLt8/
